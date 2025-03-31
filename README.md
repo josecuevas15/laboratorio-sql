@@ -40,6 +40,22 @@
 
 -- Listar las pistas que no están en ninguna playlist
 	-- SELECT T.Name FROM Track T LEFT JOIN PlaylistTrack pt ON t.TrackID = pt.TrackID WHERE pt.PlaylistID IS NULL;
+ ## EXTRAS: 
+ -- Listar las pistas ordenadas por el número de veces que aparecen en playlists de forma descendente
+	-- SELECT T.Name, COUNT(pt.PlaylistId) AS 'Veces en Playlist' FROM Track T LEFT JOIN PlaylistTrack Pt  ON T.TrackId = Pt.TrackId GROUP BY T.Name ORDER BY COUNT(pt.PlaylistId) DESC;
+
+-- Listar las pistas más compradas (la tabla InvoiceLine tiene los registros de compras)
+	-- SELECT T.Name, COUNT(Il.TrackId) AS 'Compras' FROM Track T LEFT JOIN InvoiceLine Il ON T.TrackId = Il.InvoiceLineId GROUP BY T.Name ORDER BY COUNT(Il.TrackId) DESC;
+
+-- Listar los artistas más comprados
+	-- SELECT T.Composer, COUNT(Il.TrackId) AS 'Compras' FROM Track T LEFT JOIN InvoiceLine Il ON T.TrackId = Il.InvoiceLineId GROUP BY T.Composer HAVING T.Composer != 'NULL' ORDER BY COUNT(iL.TrackId) DESC;
+
+-- Listar las pistas que aún no han sido compradas por nadie
+	-- SELECT T.Name, COUNT(Il.TrackId) AS 'Compras' FROM Track T LEFT JOIN InvoiceLine Il ON T.TrackId = Il.InvoiceLineId GROUP BY T.Name HAVING COUNT(iL.TrackId) = 0;
+
+-- Listar los artistas que aún no han vendido ninguna pista
+	-- SELECT T.Composer, COUNT(Il.TrackId) AS 'Compras' FROM Track T LEFT JOIN InvoiceLine Il ON T.TrackId = Il.InvoiceLineId GROUP BY T.Composer HAVING T.Composer != 'NULL' AND COUNT(iL.TrackId) = 0 ORDER BY COUNT(iL.TrackId) DESC;
+
 
 -- Listar los artistas que no tienen album
 	-- SELECT Ar.Name FROM Artist Ar LEFT JOIN Album Al ON Ar.ArtistId = Al.ArtistId WHERE Al.AlbumId IS NULL;
